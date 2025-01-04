@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Mágica</title>
+    <style>
+        /* Estilo base */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f6e6ff, #ffe6f2);
+            font-family: Arial, sans-serif;
+        }
+
+        .text-box-container {
+            position: absolute;
+            top: 20px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .text-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ff1493;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .envelope {
+            width: 150px;
+            height: 100px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.5s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background-color: #ffb6c1;
+            clip-path: polygon(0 20%, 50% 50%, 100% 20%, 100% 100%, 0 100%);
+            position: relative;
+        }
+
+        .envelope-flap {
+            width: 100%;
+            height: 100%;
+            background-color: #ff9aaf;
+            clip-path: polygon(0 20%, 50% 0, 100% 20%);
+            position: absolute;
+            top: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover .envelope-flap {
+            transform: rotateX(180deg);
+            transform-origin: top;
+        }
+
+        .flower {
+            position: absolute;
+            display: none;
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .flower.show {
+            opacity: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6b81;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .button-container {
+            margin-top: 40px; /* Ajustado para bajar el botón */
+        }
+
+        .button {
+            padding: 10px 15px;
+            font-size: 1em;
+            color: white;
+            background-color: #ff1493;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #ff77c4;
+        }
+
+        @media (max-width: 768px) {
+            .envelope {
+                width: 120px;
+                height: 80px;
+            }
+            .flower {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Caja de texto -->
+    <div class="text-box-container">
+        <input type="text" class="text-box" placeholder="graciasssss por la calificacion, besos y abrazos ">
+    </div>
+
+    <!-- Sobre -->
+    <div class="envelope" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body"></div>
+    </div>
+
+    <!-- Flor -->
+    <svg class="flower" id="flower" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="8" fill="#FFD700"/>
+        <g id="petals">
+            <path d="M50 20 Q60 35 50 50 Q40 35 50 20" fill="#FF69B4"/>
+            <path d="M50 20 Q60 35 50 50 Q40 35 50 20" fill="#FF69B4" transform="rotate(72 50 50)"/>
+            <path d="M50 20 Q60 35 50 50 Q40 35 50 20" fill="#FF69B4" transform="rotate(144 50 50)"/>
+            <path d="M50 20 Q60 35 50 50 Q40 35 50 20" fill="#FF69B4" transform="rotate(216 50 50)"/>
+            <path d="M50 20 Q60 35 50 50 Q40 35 50 20" fill="#FF69B4" transform="rotate(288 50 50)"/>
+        </g>
+    </svg>
+
+    <!-- Botón de regresar -->
+    <div class="button-container">
+        <button class="button" onclick="window.history.back()">Regresar</button>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const flower = document.getElementById('flower');
+        let hearts = [];
+
+        envelope.addEventListener('click', function () {
+            // Mostrar la flor
+            flower.style.display = 'block';
+            setTimeout(() => {
+                flower.classList.add('show');
+            }, 10);
+
+            // Ocultar el sobre
+            envelope.style.opacity = '0';
+            setTimeout(() => {
+                envelope.style.display = 'none';
+            }, 500);
+
+            createHearts();
+
+            setTimeout(() => {
+                hearts.forEach(heart => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                });
+                hearts = [];
+            }, 10000); // Cambiado a 10 segundos
+        });
+
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤';
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = (window.innerHeight - 20) + 'px';
+                    document.body.appendChild(heart);
+                    hearts.push(heart);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
